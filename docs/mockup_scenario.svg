@@ -1,0 +1,63 @@
+<svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="500" fill="#0a0a0a"/>
+
+  <!-- Screen 1: pre-check -->
+  <g>
+    <rect x="30" y="30" width="380" height="440" rx="28" fill="#111111" stroke="#333333" stroke-width="3"/>
+    <rect x="46" y="60" width="348" height="380" rx="14" fill="#0d0d0d"/>
+    <text x="220" y="100" fill="#ffffff" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle">Simulacro</text>
+    <text x="220" y="124" fill="#9ca3af" font-family="Arial" font-size="12" text-anchor="middle">Antes de empezar</text>
+
+    <text x="70" y="165" fill="#e5e7eb" font-family="Arial" font-size="13" font-weight="bold">Antes de empezar, una pregunta</text>
+    <text x="70" y="185" fill="#9ca3af" font-family="Arial" font-size="11">privada. Nadie mas ve tu respuesta.</text>
+
+    <rect x="70" y="205" width="308" height="70" rx="10" fill="#1a1a1a" stroke="#374151"/>
+    <text x="82" y="228" fill="#e5e7eb" font-family="Arial" font-size="11">Has vivido personalmente el</text>
+    <text x="82" y="244" fill="#e5e7eb" font-family="Arial" font-size="11">derrumbe de un edificio, o has</text>
+    <text x="82" y="260" fill="#e5e7eb" font-family="Arial" font-size="11">quedado atrapado en un sismo?</text>
+
+    <rect x="70" y="290" width="140" height="40" rx="8" fill="#f9fafb"/>
+    <text x="140" y="315" fill="#0a0a0a" font-family="Arial" font-size="12" text-anchor="middle" font-weight="bold">Si</text>
+    <rect x="238" y="290" width="140" height="40" rx="8" fill="#f9fafb"/>
+    <text x="308" y="315" fill="#0a0a0a" font-family="Arial" font-size="12" text-anchor="middle" font-weight="bold">No</text>
+
+    <text x="70" y="360" fill="#6b7280" font-family="Arial" font-size="10">Una respuesta "si" no te excluye.</text>
+    <text x="70" y="375" fill="#6b7280" font-family="Arial" font-size="10">Solo ajusta la intensidad, sin que</text>
+    <text x="70" y="390" fill="#6b7280" font-family="Arial" font-size="10">nadie mas lo sepa.</text>
+
+    <rect x="70" y="410" width="308" height="1" fill="#374151"/>
+    <text x="220" y="430" fill="#9ca3af" font-family="Arial" font-size="9" text-anchor="middle" font-style="italic">Escenario simulado, no VR real esta semana</text>
+  </g>
+
+  <!-- Screen 2: scenario + debrief -->
+  <g>
+    <rect x="490" y="30" width="380" height="440" rx="28" fill="#111111" stroke="#333333" stroke-width="3"/>
+    <rect x="506" y="60" width="348" height="380" rx="14" fill="#1c1005"/>
+
+    <text x="680" y="90" fill="#fbbf24" font-family="Arial" font-size="13" font-weight="bold" text-anchor="middle">ALARMA. Elige una salida.</text>
+
+    <!-- simple corridor illustration -->
+    <rect x="530" y="110" width="290" height="140" fill="#2a1a08" stroke="#78350f"/>
+    <polygon points="530,250 600,110 640,110 570,250" fill="#3f2410"/>
+    <rect x="640" y="130" width="60" height="120" fill="#111" stroke="#78350f"/>
+    <text x="670" y="195" fill="#dc2626" font-family="Arial" font-size="10" text-anchor="middle">bloqueada</text>
+    <rect x="740" y="120" width="55" height="130" fill="#052e16" stroke="#16a34a"/>
+    <text x="767" y="190" fill="#4ade80" font-family="Arial" font-size="10" text-anchor="middle">salida</text>
+    <text x="767" y="204" fill="#4ade80" font-family="Arial" font-size="10" text-anchor="middle">clara</text>
+
+    <text x="680" y="272" fill="#f3f4f6" font-family="Arial" font-size="11" text-anchor="middle">Tiempo: 00:04.2</text>
+
+    <rect x="530" y="290" width="130" height="38" rx="8" fill="#7c2d12"/>
+    <text x="595" y="314" fill="#fff" font-family="Arial" font-size="11" text-anchor="middle">Salida bloqueada</text>
+    <rect x="670" y="290" width="130" height="38" rx="8" fill="#14532d"/>
+    <text x="735" y="314" fill="#fff" font-family="Arial" font-size="11" text-anchor="middle">Salida clara</text>
+
+    <rect x="530" y="345" width="290" height="80" rx="10" fill="#0d0d0d" stroke="#374151"/>
+    <text x="542" y="365" fill="#93c5fd" font-family="Arial" font-size="10" font-weight="bold">Resultado, asistido por IA</text>
+    <text x="542" y="382" fill="#d1d5db" font-family="Arial" font-size="9">Elegiste la salida clara en 4.2s.</text>
+    <text x="542" y="396" fill="#d1d5db" font-family="Arial" font-size="9">Correcto. Practica: reaccionar sin</text>
+    <text x="542" y="410" fill="#d1d5db" font-family="Arial" font-size="9">confirmar dos veces antes de moverte.</text>
+
+    <text x="680" y="440" fill="#6b7280" font-family="Arial" font-size="9" text-anchor="middle" font-style="italic">Edificio y escenario ficticios, no un lugar real</text>
+  </g>
+</svg>
