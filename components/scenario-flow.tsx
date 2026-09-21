@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ScenarioCanvas } from "@/components/scenario-canvas";
 import { ScenarioSimple } from "@/components/scenario-simple";
 import { submitScenarioSession } from "@/app/scenario/actions";
-import type { ChosenExit, Intensity, ScenarioDefinition } from "@/lib/types";
+import type { BlockedSide, ChosenExit, Intensity, ScenarioDefinition } from "@/lib/types";
 
 export function ScenarioFlow({
   intensity,
@@ -15,10 +15,18 @@ export function ScenarioFlow({
   scenarios: ScenarioDefinition[];
 }) {
   const [mode, setMode] = useState<"3d" | "simple">("3d");
+  const [started, setStarted] = useState(false);
   const [isPending, startTransition] = useTransition();
   const scenario = useMemo(
     () => scenarios[Math.floor(Math.random() * scenarios.length)],
     [scenarios],
+  );
+  // Which side is blocked is randomized per run so the correct button can't
+  // be memorized by position after a few repeats, it has to actually be
+  // noticed each time.
+  const blockedSide: BlockedSide = useMemo(
+    () => (Math.random() < 0.5 ? "left" : "right"),
+    [],
   );
 
   function handleDecision(exit: ChosenExit, reactionTimeMs: number) {
@@ -62,12 +70,25 @@ export function ScenarioFlow({
 
       <p className="text-sm text-muted-foreground">{scenario.description}</p>
 
-      {isPending ? (
+      {!started ? (
+        <div
+          className="flex w-full flex-col items-center justify-center gap-3 rounded-lg border p-8 text-center"
+          style={{ minHeight: 260 }}
+        >
+          <p className="text-sm text-muted-foreground">
+            Cuando estes listo, empieza. La alarma va a sonar en un momento
+            que no vas a saber de antemano.
+          </p>
+          <Button type="button" onClick={() => setStarted(true)}>
+            Comenzar este simulacro
+          </Button>
+        </div>
+      ) : isPending ? (
         <p className="text-sm text-muted-foreground">Guardando tu resultado...</p>
       ) : mode === "3d" ? (
-        <ScenarioCanvas intensity={intensity} onDecision={handleDecision} />
+        <ScenarioCanvas intensity={intensity} blockedSide={blockedSide} onDecision={handleDecision} />
       ) : (
-        <ScenarioSimple intensity={intensity} onDecision={handleDecision} />
+        <ScenarioSimple intensity={intensity} blockedSide={blockedSide} onDecision={handleDecision} />
       )}
 
       <p className="text-center text-xs text-muted-foreground">

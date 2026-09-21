@@ -1,5 +1,6 @@
 export type Intensity = "standard" | "low";
 export type ChosenExit = "blocked" | "clear";
+export type BlockedSide = "left" | "right";
 
 export type ScenarioDefinition = {
   id: string;

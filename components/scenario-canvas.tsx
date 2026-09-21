@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { Button } from "@/components/ui/button";
-import type { ChosenExit, Intensity } from "@/lib/types";
+import type { BlockedSide, ChosenExit, Intensity } from "@/lib/types";
 
 // Business Bending slice: this is the real, working "simulation / 3D" part of
 // the dragon stack. It is a genuine, interactive Three.js scene, built to run
@@ -14,9 +14,11 @@ import type { ChosenExit, Intensity } from "@/lib/types";
 // what makes the measurement mean something, not the headset itself.
 export function ScenarioCanvas({
   intensity,
+  blockedSide,
   onDecision,
 }: {
   intensity: Intensity;
+  blockedSide: BlockedSide;
   onDecision: (exit: ChosenExit, reactionTimeMs: number) => void;
 }) {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -66,20 +68,24 @@ export function ScenarioCanvas({
     wallRight.position.set(3, 1.5, -6);
     scene.add(wallRight);
 
-    // blocked exit (left), debris pile
+    // Which physical side is blocked changes every run (packet fix: it used
+    // to be hardcoded to the left, so the correct button position could be
+    // memorized after a couple of runs instead of actually being noticed).
+    const debrisX = blockedSide === "left" ? -1.5 : 1.8;
+    const clearX = blockedSide === "left" ? 1.8 : -1.5;
+
     const debrisMat = new THREE.MeshStandardMaterial({ color: 0x5c2a1a });
     const debris = new THREE.Mesh(new THREE.BoxGeometry(2, 2.4, 1.2), debrisMat);
-    debris.position.set(-1.5, 1.2, -17);
+    debris.position.set(debrisX, 1.2, -17);
     scene.add(debris);
 
-    // clear exit (right), open doorway glow
     const clearMat = new THREE.MeshStandardMaterial({
       color: 0x14532d,
       emissive: 0x16a34a,
       emissiveIntensity: 0.4,
     });
     const clearDoor = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.4, 0.2), clearMat);
-    clearDoor.position.set(1.8, 1.2, -17.5);
+    clearDoor.position.set(clearX, 1.2, -17.5);
     scene.add(clearDoor);
 
     let frameId = 0;
@@ -132,7 +138,7 @@ export function ScenarioCanvas({
         mount.removeChild(renderer.domElement);
       }
     };
-  }, [intensity]);
+  }, [intensity, blockedSide]);
 
   useEffect(() => {
     if (!alarm) return;
@@ -166,11 +172,19 @@ export function ScenarioCanvas({
       </div>
       {alarm && (
         <div className="absolute inset-x-0 bottom-3 flex justify-center gap-3 px-3">
-          <Button variant="destructive" onClick={() => choose("blocked")}>
-            Salida izquierda (bloqueada)
+          <Button
+            variant={blockedSide === "left" ? "destructive" : "default"}
+            className={blockedSide === "left" ? undefined : "bg-green-700 hover:bg-green-800"}
+            onClick={() => choose(blockedSide === "left" ? "blocked" : "clear")}
+          >
+            {blockedSide === "left" ? "Salida izquierda (bloqueada)" : "Salida izquierda (clara)"}
           </Button>
-          <Button className="bg-green-700 hover:bg-green-800" onClick={() => choose("clear")}>
-            Salida derecha (clara)
+          <Button
+            variant={blockedSide === "right" ? "destructive" : "default"}
+            className={blockedSide === "right" ? undefined : "bg-green-700 hover:bg-green-800"}
+            onClick={() => choose(blockedSide === "right" ? "blocked" : "clear")}
+          >
+            {blockedSide === "right" ? "Salida derecha (bloqueada)" : "Salida derecha (clara)"}
           </Button>
         </div>
       )}

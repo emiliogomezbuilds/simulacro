@@ -2,16 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import type { ChosenExit, Intensity } from "@/lib/types";
+import type { BlockedSide, ChosenExit, Intensity } from "@/lib/types";
 
 // Condition 2's non-VR alternative: a fully legitimate, non-immersive path
 // that never gets treated as the lesser option. Same real mechanism, same
 // unannounced timing, same measured reaction time, no 3D rendering.
 export function ScenarioSimple({
   intensity,
+  blockedSide,
   onDecision,
 }: {
   intensity: Intensity;
+  blockedSide: BlockedSide;
   onDecision: (exit: ChosenExit, reactionTimeMs: number) => void;
 }) {
   const alarmFiredAtRef = useRef<number | null>(null);
@@ -62,12 +64,25 @@ export function ScenarioSimple({
             ALARMA. La salida principal esta bloqueada. Elige que hacer. {elapsedLabel}s
           </p>
           <div className="flex gap-3">
-            <Button variant="destructive" onClick={() => choose("blocked")}>
-              Ir por la salida bloqueada de todos modos
-            </Button>
-            <Button className="bg-green-700 hover:bg-green-800" onClick={() => choose("clear")}>
-              Ir por la salida alterna clara
-            </Button>
+            {blockedSide === "left" ? (
+              <>
+                <Button variant="destructive" onClick={() => choose("blocked")}>
+                  Ir por la salida bloqueada de todos modos
+                </Button>
+                <Button className="bg-green-700 hover:bg-green-800" onClick={() => choose("clear")}>
+                  Ir por la salida alterna clara
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button className="bg-green-700 hover:bg-green-800" onClick={() => choose("clear")}>
+                  Ir por la salida alterna clara
+                </Button>
+                <Button variant="destructive" onClick={() => choose("blocked")}>
+                  Ir por la salida bloqueada de todos modos
+                </Button>
+              </>
+            )}
           </div>
         </div>
       )}
