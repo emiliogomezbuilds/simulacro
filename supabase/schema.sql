@@ -62,6 +62,64 @@ insert into scenario_definitions (name, colonia, soil_type, description, scenari
 on conflict do nothing;
 
 -- ============================================================
+-- SIX MORE SCENARIOS, added to build a full set of 10, so a person attempts
+-- every scenario once instead of repeating a small pool forever. Five are
+-- dilemma type: each one's correct answer follows only from facts stated
+-- inside that scenario's own description (a reported gas leak, a visibly
+-- cracked stairwell, a described crowd crush), never from a general safety
+-- claim asserted as universal real-world fact.
+-- ============================================================
+insert into scenario_definitions (name, colonia, soil_type, description) values
+  ('Comedor escolar con salida principal atascada (ejemplo simulado)',
+   'Benito Juarez',
+   'suelo blando, ex lago',
+   'Edificio y comedor ficticios. La salida principal del comedor esta atascada por mesas volcadas; hay una salida lateral clara hacia el patio.')
+on conflict do nothing;
+
+insert into scenario_definitions (name, colonia, soil_type, description, scenario_type, option_a_label, option_b_label, correct_option) values
+  ('Biblioteca en planta baja con estantes caidos (ejemplo simulado)',
+   'Xochimilco',
+   'suelo blando, ex lago',
+   'Biblioteca ficticia en planta baja de un edificio ficticio. El pasillo hacia la puerta de entrada esta bloqueado por estantes caidos que se ven inestables y podrian volver a caer. Hay una sala de lectura lateral cuya puerta ya esta despejada y da directo al patio.',
+   'dilemma',
+   'Trepar sobre los estantes caidos hacia la puerta de entrada',
+   'Salir por la sala de lectura lateral hacia el patio',
+   'b'),
+  ('Taller de ciencias con fuga de gas reportada (ejemplo simulado)',
+   'Tlahuac',
+   'suelo blando, ex lago',
+   'Taller de ciencias ficticio en un edificio ficticio. Se reporto una fuga de gas cerca de la puerta que da al pasillo principal. La puerta del fondo del taller, lejos del olor a gas, tambien lleva a la salida del edificio.',
+   'dilemma',
+   'Salir por la puerta cercana a la fuga de gas reportada',
+   'Salir por la puerta del fondo, lejos del olor a gas',
+   'b'),
+  ('Cancha techada con salida principal congestionada (ejemplo simulado)',
+   'Venustiano Carranza',
+   'suelo blando, ex lago',
+   'Cancha techada ficticia de un edificio ficticio. Una multitud se esta empujando frente a la salida principal, formando un cuello de botella peligroso. Hay una reja lateral de mantenimiento, menos conocida, que en este momento esta despejada.',
+   'dilemma',
+   'Unirse a la multitud en la salida principal',
+   'Usar la reja lateral de mantenimiento, despejada',
+   'b'),
+  ('Dormitorio de internado con escalera agrietada (ejemplo simulado)',
+   'Gustavo A. Madero',
+   'suelo blando, ex lago',
+   'Dormitorio ficticio en el segundo piso de un internado ficticio. La escalera interior tiene grietas visibles en la pared de alrededor. Una escalera de emergencia exterior de metal, revisada hace poco, tambien baja hasta la calle.',
+   'dilemma',
+   'Bajar por la escalera interior con grietas visibles',
+   'Bajar por la escalera de emergencia exterior, revisada hace poco',
+   'b'),
+  ('Cafeteria en planta baja con grieta en la fachada (ejemplo simulado)',
+   'Iztacalco',
+   'suelo blando, ex lago',
+   'Cafeteria ficticia en planta baja de un edificio ficticio. Una de las dos puertas hacia la calle tiene una grieta visible en la fachada justo arriba. La otra puerta, en el extremo opuesto, no tiene ningun dano visible.',
+   'dilemma',
+   'Salir por la puerta bajo la grieta visible en la fachada',
+   'Salir por la puerta del otro extremo, sin dano visible',
+   'b')
+on conflict do nothing;
+
+-- ============================================================
 -- PRETEST ANSWERS, condition 2's private trauma pre-check. One row per
 -- user. Never shown to anyone but the user themselves, only used server-side
 -- to silently pick the intensity mode.

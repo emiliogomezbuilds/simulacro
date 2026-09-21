@@ -32,9 +32,12 @@ export function ScenarioFlow({
   const [blockedSide, setBlockedSide] = useState<BlockedSide>(() =>
     Math.random() < 0.5 ? "left" : "right",
   );
+  // Same fresh-per-click randomization for which dilemma option shows first.
+  const [dilemmaSwapped, setDilemmaSwapped] = useState(() => Math.random() < 0.5);
 
   function handleStart() {
     setBlockedSide(Math.random() < 0.5 ? "left" : "right");
+    setDilemmaSwapped(Math.random() < 0.5);
     setStarted(true);
   }
 
@@ -113,6 +116,7 @@ export function ScenarioFlow({
           optionALabel={scenario.option_a_label ?? "Opcion A"}
           optionBLabel={scenario.option_b_label ?? "Opcion B"}
           correctOption={scenario.correct_option ?? "a"}
+          swapped={dilemmaSwapped}
           onDecision={handleDecision}
         />
       ) : mode === "3d" ? (

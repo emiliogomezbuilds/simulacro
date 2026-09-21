@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { LogoutButton } from "@/components/logout-button";
 import { ScenarioPrecheck } from "@/components/scenario-precheck";
 import { ScenarioFlow } from "@/components/scenario-flow";
-import { SessionHistory } from "@/components/session-history";
+import { ScenarioReport } from "@/components/scenario-report";
 import type { Intensity, PretestAnswer, ScenarioDefinition, ScenarioSession } from "@/lib/types";
 
 // Cache Components (next.config.ts: cacheComponents: true): anything that
@@ -41,6 +41,15 @@ async function ScenarioContent({
   const sessions = (sessionsRaw ?? []) as ScenarioSession[];
   const intensity: Intensity = pretest?.prior_trauma ? "low" : "standard";
 
+  // Each scenario in the library is meant to be attempted once, not
+  // repeated forever, so a person can see an overall result at the end
+  // instead of an open-ended stream of repeats. completedIds tracks every
+  // scenario this person has attempted at least once; once none remain,
+  // the page switches from "keep practicing" into the final report.
+  const completedIds = new Set(sessions.map((s) => s.scenario_id));
+  const remainingScenarios = scenarios.filter((sc) => !completedIds.has(sc.id));
+  const isComplete = scenarios.length > 0 && remainingScenarios.length === 0;
+
   return (
     <>
       <div className="flex w-full max-w-lg items-center justify-between">
@@ -62,11 +71,16 @@ async function ScenarioContent({
 
       {!pretest ? (
         <ScenarioPrecheck />
+      ) : isComplete ? (
+        <ScenarioReport scenarios={scenarios} sessions={sessions} />
       ) : (
-        <ScenarioFlow intensity={intensity} scenarios={scenarios} />
+        <>
+          <p className="w-full max-w-lg text-sm text-muted-foreground">
+            Progreso: {completedIds.size} de {scenarios.length} escenarios completados.
+          </p>
+          <ScenarioFlow intensity={intensity} scenarios={remainingScenarios} />
+        </>
       )}
-
-      <SessionHistory sessions={sessions} />
     </>
   );
 }

@@ -16,12 +16,19 @@ export function ScenarioDilemma({
   optionALabel,
   optionBLabel,
   correctOption,
+  swapped,
   onDecision,
 }: {
   intensity: Intensity;
   optionALabel: string;
   optionBLabel: string;
   correctOption: DilemmaOption;
+  // Which button shows first on screen, decided by the parent fresh at the
+  // moment the person clicks Comenzar (same pattern as blockedSide on the
+  // corridor scenario). Without this, the correct option would always sit
+  // in the same on-screen slot for a given scenario, and could be
+  // memorized by position instead of by actually reading the two options.
+  swapped: boolean;
   onDecision: (exit: ChosenExit, reactionTimeMs: number) => void;
 }) {
   const alarmFiredAtRef = useRef<number | null>(null);
@@ -54,6 +61,16 @@ export function ScenarioDilemma({
     onDecision(exit, performance.now() - alarmFiredAtRef.current);
   }
 
+  const buttons: { key: DilemmaOption; label: string }[] = swapped
+    ? [
+        { key: "b", label: optionBLabel },
+        { key: "a", label: optionALabel },
+      ]
+    : [
+        { key: "a", label: optionALabel },
+        { key: "b", label: optionBLabel },
+      ];
+
   return (
     <div
       className={`w-full rounded-lg border p-8 text-center ${
@@ -73,12 +90,16 @@ export function ScenarioDilemma({
         <div className="flex flex-col items-center gap-4">
           <p className="text-lg font-bold">Decide ahora. {elapsedLabel}s</p>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Button variant="outline" className="whitespace-normal" onClick={() => choose("a")}>
-              {optionALabel}
-            </Button>
-            <Button variant="outline" className="whitespace-normal" onClick={() => choose("b")}>
-              {optionBLabel}
-            </Button>
+            {buttons.map((b) => (
+              <Button
+                key={b.key}
+                variant="outline"
+                className="whitespace-normal"
+                onClick={() => choose(b.key)}
+              >
+                {b.label}
+              </Button>
+            ))}
           </div>
         </div>
       )}
