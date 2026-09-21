@@ -5,7 +5,22 @@ import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
 import { generateDebrief } from "@/lib/debrief";
-import type { ChosenExit, Intensity } from "@/lib/types";
+import type { ChosenExit, Intensity, ScenarioDefinition } from "@/lib/types";
+
+// Derives the human-readable phrase for whatever the person actually chose,
+// from the scenario's own authoritative data, never from client-supplied
+// text. Corridor scenarios keep the original "salida clara / bloqueada"
+// wording; dilemma scenarios use the scenario's own option labels so the
+// debrief reads naturally either way.
+function deriveChosenLabel(scenario: ScenarioDefinition, chosenExit: ChosenExit): string {
+  if (scenario.scenario_type === "dilemma") {
+    const correct = chosenExit === "clear";
+    const correctLabel = scenario.correct_option === "a" ? scenario.option_a_label : scenario.option_b_label;
+    const wrongLabel = scenario.correct_option === "a" ? scenario.option_b_label : scenario.option_a_label;
+    return (correct ? correctLabel : wrongLabel) ?? (correct ? "la opcion mas segura" : "la otra opcion");
+  }
+  return chosenExit === "clear" ? "la salida clara" : "la salida bloqueada";
+}
 
 export async function savePretestAnswer(formData: FormData) {
   const supabase = await createClient();
@@ -31,7 +46,6 @@ export async function savePretestAnswer(formData: FormData) {
 
 export async function submitScenarioSession(input: {
   scenarioId: string;
-  scenarioName: string;
   intensity: Intensity;
   chosenExit: ChosenExit;
   reactionTimeMs: number;
@@ -46,7 +60,10 @@ export async function submitScenarioSession(input: {
   const userId = auth.claims.sub as string;
 
   // Every input from the client is validated server-side (security floor):
-  // nothing raw lands in the database or the model prompt.
+  // nothing raw lands in the database or the model prompt. The scenario
+  // name and option labels are looked up from the database by id below,
+  // never trusted from the client, so a tampered client can't put arbitrary
+  // text in front of the debrief model.
   if (!input.scenarioId || typeof input.scenarioId !== "string") {
     redirect("/scenario?error=Escenario invalido. Intenta de nuevo.");
   }
@@ -60,12 +77,26 @@ export async function submitScenarioSession(input: {
   if (!Number.isFinite(reactionTimeMs) || reactionTimeMs < 0 || reactionTimeMs > 120000) {
     redirect("/scenario?error=Tiempo de reaccion invalido. Intenta de nuevo.");
   }
-  const scenarioName = String(input.scenarioName ?? "el escenario").slice(0, 200);
+
+  const { data: scenarioRow, error: scenarioError } = await supabase
+    .from("scenario_definitions")
+    .select("*")
+    .eq("id", input.scenarioId)
+    .maybeSingle();
+
+  if (scenarioError || !scenarioRow) {
+    redirect("/scenario?error=Escenario invalido. Intenta de nuevo.");
+    return;
+  }
+
+  const scenario = scenarioRow as ScenarioDefinition;
+  const chosenLabel = deriveChosenLabel(scenario, input.chosenExit);
 
   const { text: debrief, method } = await generateDebrief(
     input.chosenExit,
+    chosenLabel,
     reactionTimeMs,
-    scenarioName,
+    scenario.name,
   );
 
   const { data: inserted, error: insertError } = await supabase

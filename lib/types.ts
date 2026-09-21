@@ -1,6 +1,8 @@
 export type Intensity = "standard" | "low";
 export type ChosenExit = "blocked" | "clear";
 export type BlockedSide = "left" | "right";
+export type ScenarioType = "corridor" | "dilemma";
+export type DilemmaOption = "a" | "b";
 
 export type ScenarioDefinition = {
   id: string;
@@ -9,6 +11,10 @@ export type ScenarioDefinition = {
   soil_type: string;
   description: string;
   is_simulated: boolean;
+  scenario_type: ScenarioType;
+  option_a_label: string | null;
+  option_b_label: string | null;
+  correct_option: DilemmaOption | null;
   created_at: string;
 };
 

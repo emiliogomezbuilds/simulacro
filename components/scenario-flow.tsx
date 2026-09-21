@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { ScenarioCanvas } from "@/components/scenario-canvas";
 import { ScenarioSimple } from "@/components/scenario-simple";
+import { ScenarioDilemma } from "@/components/scenario-dilemma";
 import { submitScenarioSession } from "@/app/scenario/actions";
 import type { BlockedSide, ChosenExit, Intensity, ScenarioDefinition } from "@/lib/types";
 
@@ -53,7 +54,6 @@ export function ScenarioFlow({
     startTransition(() => {
       submitScenarioSession({
         scenarioId: scenario.id,
-        scenarioName: scenario.name,
         intensity,
         chosenExit: exit,
         reactionTimeMs,
@@ -78,14 +78,16 @@ export function ScenarioFlow({
             {scenario.colonia}, {scenario.soil_type}
           </p>
         </div>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          onClick={() => setMode(mode === "3d" ? "simple" : "3d")}
-        >
-          {mode === "3d" ? "Prefiero la version sin animacion" : "Usar la version 3D"}
-        </Button>
+        {scenario.scenario_type === "corridor" && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setMode(mode === "3d" ? "simple" : "3d")}
+          >
+            {mode === "3d" ? "Prefiero la version sin animacion" : "Usar la version 3D"}
+          </Button>
+        )}
       </div>
 
       <p className="text-sm text-muted-foreground">{scenario.description}</p>
@@ -105,6 +107,14 @@ export function ScenarioFlow({
         </div>
       ) : isPending ? (
         <p className="text-sm text-muted-foreground">Guardando tu resultado...</p>
+      ) : scenario.scenario_type === "dilemma" ? (
+        <ScenarioDilemma
+          intensity={intensity}
+          optionALabel={scenario.option_a_label ?? "Opcion A"}
+          optionBLabel={scenario.option_b_label ?? "Opcion B"}
+          correctOption={scenario.correct_option ?? "a"}
+          onDecision={handleDecision}
+        />
       ) : mode === "3d" ? (
         <ScenarioCanvas intensity={intensity} blockedSide={blockedSide} onDecision={handleDecision} />
       ) : (

@@ -15,6 +15,17 @@ create table if not exists scenario_definitions (
   soil_type text not null default 'suelo blando',
   description text not null,
   is_simulated boolean not null default true,
+  -- 'corridor' scenarios are the original 3D / plain-text pattern-recognition
+  -- test, with a visually or textually distinct blocked vs clear exit.
+  -- 'dilemma' scenarios are a judgment test added after persona testing:
+  -- two custom-labeled options, neither color-coded, correctness has to
+  -- come from reading the scenario's own stated facts, not from spotting a
+  -- shape. Both share scenario_sessions and the same clear/blocked
+  -- correctness semantics.
+  scenario_type text not null default 'corridor' check (scenario_type in ('corridor', 'dilemma')),
+  option_a_label text,
+  option_b_label text,
+  correct_option text check (correct_option in ('a', 'b')),
   created_at timestamptz not null default now()
 );
 
@@ -37,6 +48,17 @@ insert into scenario_definitions (name, colonia, soil_type, description) values
    'Doctores',
    'suelo blando, ex lago',
    'Edificio y patio ficticios. La salida frente al patio esta bloqueada; una salida secundaria lateral esta despejada.')
+on conflict do nothing;
+
+insert into scenario_definitions (name, colonia, soil_type, description, scenario_type, option_a_label, option_b_label, correct_option) values
+  ('Salon de cuarto piso con entrada bloqueada por una multitud (ejemplo simulado)',
+   'Iztapalapa',
+   'suelo blando, ex lago',
+   'Salon ficticio en el cuarto piso de un edificio ficticio. La salida principal esta bloqueada por una multitud que no avanza. Hay una ventana angosta que da a un techo inclinado y resbaloso de un edificio vecino, tres pisos hacia abajo. Tambien hay una puerta trasera que lleva a una escalera de emergencia techada y sin obstrucciones, que baja hasta la calle.',
+   'dilemma',
+   'Salir por la ventana hacia el techo vecino',
+   'Salir por la puerta trasera hacia la escalera de emergencia',
+   'b')
 on conflict do nothing;
 
 -- ============================================================
