@@ -39,22 +39,22 @@ insert into scenario_definitions (name, colonia, soil_type, description) values
   ('Pasillo con salida bloqueada (ejemplo simulado)',
    'Roma',
    'suelo blando, ex lago',
-   'Edificio y pasillo ficticios. La salida principal esta bloqueada por un derrumbe parcial; hay una salida alterna clara al fondo.'),
+   'En este edificio, el pasillo principal esta bloqueado por un derrumbe parcial; hay una salida alterna clara al fondo.'),
   ('Escalera con obstruccion (ejemplo simulado)',
    'Condesa',
    'suelo blando, ex lago',
-   'Edificio y escalera ficticios. Una de las dos escaleras esta obstruida; la otra esta despejada.'),
+   'En este edificio hay dos escaleras. Una esta obstruida; la otra esta despejada.'),
   ('Patio con salida secundaria (ejemplo simulado)',
    'Doctores',
    'suelo blando, ex lago',
-   'Edificio y patio ficticios. La salida frente al patio esta bloqueada; una salida secundaria lateral esta despejada.')
+   'En este edificio, la salida frente al patio esta bloqueada; una salida secundaria lateral esta despejada.')
 on conflict do nothing;
 
 insert into scenario_definitions (name, colonia, soil_type, description, scenario_type, option_a_label, option_b_label, correct_option) values
   ('Salon de cuarto piso con entrada bloqueada por una multitud (ejemplo simulado)',
    'Iztapalapa',
    'suelo blando, ex lago',
-   'Salon ficticio en el cuarto piso de un edificio ficticio. La salida principal esta bloqueada por una multitud que no avanza. Hay una ventana angosta que da a un techo inclinado y resbaloso de un edificio vecino, tres pisos hacia abajo. Tambien hay una puerta trasera que lleva a una escalera de emergencia techada y sin obstrucciones, que baja hasta la calle.',
+   'Estas en un salon del cuarto piso. La salida principal esta bloqueada por una multitud que no avanza. Hay una ventana angosta que da a un techo inclinado y resbaloso de un edificio vecino, tres pisos hacia abajo. Tambien hay una puerta trasera que lleva a una escalera de emergencia techada y sin obstrucciones, que baja hasta la calle.',
    'dilemma',
    'Salir por la ventana hacia el techo vecino',
    'Salir por la puerta trasera hacia la escalera de emergencia',
@@ -73,14 +73,14 @@ insert into scenario_definitions (name, colonia, soil_type, description) values
   ('Comedor escolar con salida principal atascada (ejemplo simulado)',
    'Benito Juarez',
    'suelo blando, ex lago',
-   'Edificio y comedor ficticios. La salida principal del comedor esta atascada por mesas volcadas; hay una salida lateral clara hacia el patio.')
+   'En este comedor escolar, la salida principal esta atascada por mesas volcadas; hay una salida lateral clara hacia el patio.')
 on conflict do nothing;
 
 insert into scenario_definitions (name, colonia, soil_type, description, scenario_type, option_a_label, option_b_label, correct_option) values
   ('Biblioteca en planta baja con estantes caidos (ejemplo simulado)',
    'Xochimilco',
    'suelo blando, ex lago',
-   'Biblioteca ficticia en planta baja de un edificio ficticio. El pasillo hacia la puerta de entrada esta bloqueado por estantes caidos que se ven inestables y podrian volver a caer. Hay una sala de lectura lateral cuya puerta ya esta despejada y da directo al patio.',
+   'Estas en una biblioteca en planta baja. El pasillo hacia la puerta de entrada esta bloqueado por estantes caidos que se ven inestables y podrian volver a caer. Hay una sala de lectura lateral cuya puerta ya esta despejada y da directo al patio.',
    'dilemma',
    'Trepar sobre los estantes caidos hacia la puerta de entrada',
    'Salir por la sala de lectura lateral hacia el patio',
@@ -88,7 +88,7 @@ insert into scenario_definitions (name, colonia, soil_type, description, scenari
   ('Taller de ciencias con fuga de gas reportada (ejemplo simulado)',
    'Tlahuac',
    'suelo blando, ex lago',
-   'Taller de ciencias ficticio en un edificio ficticio. Se reporto una fuga de gas cerca de la puerta que da al pasillo principal. La puerta del fondo del taller, lejos del olor a gas, tambien lleva a la salida del edificio.',
+   'Estas en un taller de ciencias. Se reporto una fuga de gas cerca de la puerta que da al pasillo principal. La puerta del fondo del taller, lejos del olor a gas, tambien lleva a la salida del edificio.',
    'dilemma',
    'Salir por la puerta cercana a la fuga de gas reportada',
    'Salir por la puerta del fondo, lejos del olor a gas',
@@ -96,7 +96,7 @@ insert into scenario_definitions (name, colonia, soil_type, description, scenari
   ('Cancha techada con salida principal congestionada (ejemplo simulado)',
    'Venustiano Carranza',
    'suelo blando, ex lago',
-   'Cancha techada ficticia de un edificio ficticio. Una multitud se esta empujando frente a la salida principal, formando un cuello de botella peligroso. Hay una reja lateral de mantenimiento, menos conocida, que en este momento esta despejada.',
+   'Estas en una cancha techada. Una multitud se esta empujando frente a la salida principal, formando un cuello de botella peligroso. Hay una reja lateral de mantenimiento, menos conocida, que en este momento esta despejada.',
    'dilemma',
    'Unirse a la multitud en la salida principal',
    'Usar la reja lateral de mantenimiento, despejada',
@@ -104,7 +104,7 @@ insert into scenario_definitions (name, colonia, soil_type, description, scenari
   ('Dormitorio de internado con escalera agrietada (ejemplo simulado)',
    'Gustavo A. Madero',
    'suelo blando, ex lago',
-   'Dormitorio ficticio en el segundo piso de un internado ficticio. La escalera interior tiene grietas visibles en la pared de alrededor. Una escalera de emergencia exterior de metal, revisada hace poco, tambien baja hasta la calle.',
+   'Estas en un dormitorio en el segundo piso de un internado. La escalera interior tiene grietas visibles en la pared de alrededor. Una escalera de emergencia exterior de metal, revisada hace poco, tambien baja hasta la calle.',
    'dilemma',
    'Bajar por la escalera interior con grietas visibles',
    'Bajar por la escalera de emergencia exterior, revisada hace poco',
@@ -112,7 +112,7 @@ insert into scenario_definitions (name, colonia, soil_type, description, scenari
   ('Cafeteria en planta baja con grieta en la fachada (ejemplo simulado)',
    'Iztacalco',
    'suelo blando, ex lago',
-   'Cafeteria ficticia en planta baja de un edificio ficticio. Una de las dos puertas hacia la calle tiene una grieta visible en la fachada justo arriba. La otra puerta, en el extremo opuesto, no tiene ningun dano visible.',
+   'Estas en una cafeteria en planta baja. Una de las dos puertas hacia la calle tiene una grieta visible en la fachada justo arriba. La otra puerta, en el extremo opuesto, no tiene ningun dano visible.',
    'dilemma',
    'Salir por la puerta bajo la grieta visible en la fachada',
    'Salir por la puerta del otro extremo, sin dano visible',
