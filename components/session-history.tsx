@@ -11,8 +11,42 @@ export function SessionHistory({ sessions }: { sessions: ScenarioSession[] }) {
     );
   }
 
+  const total = sessions.length;
+  const correctCount = sessions.filter((s) => s.chosen_exit === "clear").length;
+  const avgReactionMs =
+    sessions.reduce((sum, s) => sum + s.reaction_time_ms, 0) / total;
+
   return (
     <div className="flex w-full max-w-lg flex-col gap-4">
+      <Card className="border-muted-foreground/20 bg-muted/20">
+        <CardHeader>
+          <CardTitle className="text-base">Tu progreso</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-2">
+          <div className="flex gap-6 text-sm">
+            <div>
+              <p className="text-2xl font-bold">{total}</p>
+              <p className="text-muted-foreground">simulacros hechos</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold">
+                {correctCount}/{total}
+              </p>
+              <p className="text-muted-foreground">salida correcta elegida</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold">{(avgReactionMs / 1000).toFixed(1)}s</p>
+              <p className="text-muted-foreground">tiempo de reaccion promedio</p>
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Esto no certifica que sabrias sobrevivir un sismo real. Solo muestra si,
+            con la practica repetida, reconoces la salida correcta cada vez mas rapido.
+            Repite el simulacro de vez en cuando y compara tu tiempo con el de antes.
+          </p>
+        </CardContent>
+      </Card>
+
       <h2 className="text-lg font-semibold">Tus simulacros</h2>
       {sessions.map((s) => {
         const correct = s.chosen_exit === "clear";
