@@ -39,44 +39,58 @@ export function ScenarioCanvas({
     scene.background = new THREE.Color(0x0a0a0a);
 
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
-    camera.position.set(0, 1.5, 8);
-    camera.lookAt(0, 1.2, -10);
+    camera.position.set(0, 1.5, 6);
+    camera.lookAt(0, 1.2, -9);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
     mount.appendChild(renderer.domElement);
 
-    const ambient = new THREE.AmbientLight(0x404040, 1.2);
+    // Brighter ambient than before, the corridor needs to be legible on its
+    // own so a person can actually read the scene, not just spot the one lit
+    // shape (packet fix: layout review found the blocked side was nearly
+    // invisible against the black background, turning the exercise into
+    // "find the green thing" instead of "read the scene").
+    const ambient = new THREE.AmbientLight(0x404040, 1.6);
     scene.add(ambient);
 
     const alarmLight = new THREE.PointLight(0x991b1b, 0, 20);
     alarmLight.position.set(0, 3, -2);
     scene.add(alarmLight);
 
-    // corridor: floor, two walls, far wall with two "exits"
+    // Shorter corridor than before so both exits sit closer to the camera
+    // and read as clearly separated, rather than shrinking toward a distant
+    // vanishing point.
     const floorMat = new THREE.MeshStandardMaterial({ color: 0x1c1c1c });
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(6, 24), floorMat);
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(6, 14), floorMat);
     floor.rotation.x = -Math.PI / 2;
-    floor.position.set(0, 0, -6);
+    floor.position.set(0, 0, -4);
     scene.add(floor);
 
     const wallMat = new THREE.MeshStandardMaterial({ color: 0x2a1a10 });
-    const wallLeft = new THREE.Mesh(new THREE.BoxGeometry(0.3, 3, 24), wallMat);
-    wallLeft.position.set(-3, 1.5, -6);
+    const wallLeft = new THREE.Mesh(new THREE.BoxGeometry(0.3, 3, 14), wallMat);
+    wallLeft.position.set(-3, 1.5, -4);
     scene.add(wallLeft);
-    const wallRight = new THREE.Mesh(new THREE.BoxGeometry(0.3, 3, 24), wallMat);
-    wallRight.position.set(3, 1.5, -6);
+    const wallRight = new THREE.Mesh(new THREE.BoxGeometry(0.3, 3, 14), wallMat);
+    wallRight.position.set(3, 1.5, -4);
     scene.add(wallRight);
 
     // Which physical side is blocked changes every run (packet fix: it used
     // to be hardcoded to the left, so the correct button position could be
     // memorized after a couple of runs instead of actually being noticed).
-    const debrisX = blockedSide === "left" ? -1.5 : 1.8;
-    const clearX = blockedSide === "left" ? 1.8 : -1.5;
+    const debrisX = blockedSide === "left" ? -1.9 : 2.0;
+    const clearX = blockedSide === "left" ? 2.0 : -1.9;
 
-    const debrisMat = new THREE.MeshStandardMaterial({ color: 0x5c2a1a });
-    const debris = new THREE.Mesh(new THREE.BoxGeometry(2, 2.4, 1.2), debrisMat);
-    debris.position.set(debrisX, 1.2, -17);
+    // Debris now glows a visible hazard orange instead of a near-black
+    // brown, so it reads as "something is wrong here" on its own, the same
+    // way the clear exit reads as "safe" on its own.
+    const debrisMat = new THREE.MeshStandardMaterial({
+      color: 0x7c2d12,
+      emissive: 0xea580c,
+      emissiveIntensity: 0.35,
+    });
+    const debris = new THREE.Mesh(new THREE.BoxGeometry(2.2, 2.6, 1.3), debrisMat);
+    debris.position.set(debrisX, 1.2, -9);
     scene.add(debris);
 
     const clearMat = new THREE.MeshStandardMaterial({
@@ -84,8 +98,8 @@ export function ScenarioCanvas({
       emissive: 0x16a34a,
       emissiveIntensity: 0.4,
     });
-    const clearDoor = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.4, 0.2), clearMat);
-    clearDoor.position.set(clearX, 1.2, -17.5);
+    const clearDoor = new THREE.Mesh(new THREE.BoxGeometry(1.8, 2.6, 0.25), clearMat);
+    clearDoor.position.set(clearX, 1.2, -9.4);
     scene.add(clearDoor);
 
     let frameId = 0;
