@@ -185,6 +185,27 @@ export function ScenarioCanvas({
         )}
       </div>
       {alarm && (
+        // Labels stamped directly on each shape, not just on the buttons
+        // below. Real feedback from testing: two colored boxes with no text
+        // forced the person to cross-reference left/right position against
+        // the button row to figure out which shape was which, exactly the
+        // kind of extra step that shouldn't exist once the alarm is live.
+        <div className="pointer-events-none absolute inset-0">
+          <span
+            className="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded bg-black/70 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-white"
+            style={{ left: blockedSide === "left" ? "42%" : "58%", top: "54%" }}
+          >
+            Bloqueada
+          </span>
+          <span
+            className="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded bg-black/70 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-white"
+            style={{ left: blockedSide === "left" ? "58%" : "42%", top: "54%" }}
+          >
+            Clara
+          </span>
+        </div>
+      )}
+      {alarm && (
         <div className="absolute inset-x-0 bottom-3 flex justify-center gap-3 px-3">
           <Button
             variant={blockedSide === "left" ? "destructive" : "default"}
